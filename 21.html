@@ -1,0 +1,715 @@
+<!doctype html>
+<html class="next-plus use-motion">
+<head>
+  
+    
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0rc2"/>
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/awesome/css/font-awesome.min.css?v=4.3.0"/>
+
+
+
+    <meta name="description" content="关注移动互联网、WEB后端开发、服务器运维等，苦逼全栈程序猿的自留地。" />
+
+
+
+	<meta name="keywords" content="斯诺登,检测Xcode后门,棱镜门," />
+
+  <title> 检测你的Xcode中是否有CIA的后门 - lurrpis </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div id="header" class="header">
+      <div class="headband"></div>
+        <div class="wrap">
+    <div class="inner">
+        <span class="head-title">
+            <a class="hvr-underline-from-center" href="/">LURRPIS</a>
+        </span>
+        
+        <ul class="nav-menu">
+        
+         
+            <li>
+                <a href="/" class="hvr-underline-from-center">首页</a>
+            </li>
+            
+         
+            <li>
+                <a href="/archives" class="hvr-underline-from-center">归档</a>
+            </li>
+            
+         
+            <li>
+                <a href="/tags" class="hvr-underline-from-center">标签</a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              检测你的Xcode中是否有CIA的后门
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-23
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            
+            <a class="tocomments" href="#comments" >
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="21.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <p>根据斯诺登近期爆料的文件显示，CIA在美国桑迪亚Sandia国家实验室开发了一款流氓版Xcode。这个版本的Xcode会在苹果开发者的电脑中植入后门，窃取他们的个人开发密钥<code>private codesign key</code>。</p>
+<p><img src="http://static.blog.lurrpis.com/1.png" alt="CIA后门"></p>
+<p>那么如何检测这个后门呢？我们可以通过检测被这个后门所篡改的安全机制是否能正确的运行来验证。根据斯诺登披露的文件，该后门篡改了securityd守护进程，使得在导出开发者密钥的时候并不向用户发出警告。</p>
+<blockquote>
+<p><strong>后门重写了securityd，使在导出开发者密钥的时候并不向用户弹出警告</strong></p>
+</blockquote>
+<p>所以最好的测试方法就是试着导出你的开发者密钥，看看securityd会不会发出警告，以获取你的同意。</p>
+<p>根据这篇文章，你会知道如何导出个人密钥：</p>
+<ol>
+<li>在<code>Xcode Preference</code>窗口中，单击<code>Accounts</code></li>
+<li>点击做下角的<code>Action</code>按钮（在minus按钮的右边）</li>
+<li>在弹出窗口中选择<code>Export Accounts</code></li>
+</ol>
+<p>此时，securityd应该弹出一个窗口，询问你是否允许导出你的密钥。</p>
+<p><img src="http://static.blog.lurrpis.com/2.png" alt="CIA后门"></p>
+<p>如果你没有看到弹出窗口，那你很可能就中招了，后门会在你不知情的情况下导出你的密钥。</p>
+<p>因为我们并没有拿到这款据称由CIA篡改的Xcode，所以我们并不能肯定该方法一定有效。但根据曝出的幻灯片中的信息，起码在特定情况下，这种检测是有效的。</p>
+<p>[via@<a href="http://bobao.360.cn/news/detail/1302.html" target="_blank">360bobao</a>]</p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/斯诺登/">
+                #斯诺登
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/检测Xcode后门/">
+                #检测Xcode后门
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/棱镜门/">
+                #棱镜门
+              </a>
+            
+          </div>
+        
+
+        
+          <div class="post-nav">
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/23.html">运维小技巧:为你的SSH添加被爆破记录</a>
+              
+            </div>
+
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/20.html">3.15晚会黑客WiFi实现全教程，WiFi捕获和中间人攻击</a>
+              
+            </div>
+          </div>
+        
+
+
+        
+        
+      </div>
+    
+  </div>
+
+
+
+  
+    <div class="comments" id="comments">
+        <div class="ds-thread" data-thread-key="21.html" data-title="检测你的Xcode中是否有CIA的后门" data-url="http://lurrpis.com/21.html">
+        </div>
+    </div>
+  
+
+          </div>
+
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-overview" data-target="site-overview">站点概览</li>
+        <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc">文章目录</li>
+      </ul>
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="http://static.blog.lurrpis.com/logo/500x500.png" alt="LURRPIS" />
+        <p class="site-author-name">LURRPIS<a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></p>
+      </div>
+      <p class="site-description motion-element">快速积累，静待时机</p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">文章</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">102</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      <div class="social-info motion-element">
+            <span class="soclial-item">
+              <a href="https://github.com/lurrpis" target="_blank"><i class="fa fa-github-alt"></i> GitHub</a>
+            </span>
+            <span class="soclial-item">
+              <a href="http://weibo.com/lurrpis" target="_blank"><i class="fa fa-weibo"></i> WeiBo</a>
+            </span>
+            <span class="soclial-item">
+              <a href="javascript:void(0)" target="_blank" id="wechat"><i class="fa fa-weixin"></i> WeChat</a>
+            </span>
+            <div class="div-email">
+              <span class="soclial-item">
+                <a href="mailto:hi@lurrpis.com" target="_blank"><i class="fa fa-paper-plane"></i> Email:hi@lurrpis.com</a>
+              </span>
+            </div>
+            <div class="ercode">
+              <img src="http://static.blog.lurrpis.com/wechat/ercode_fixed.png">
+            </div>
+      </div>
+    </div>
+
+    
+      <div class="post-toc sidebar-panel-active">
+        
+          
+            <p class="post-toc-empty">此文章未包含目录</p>
+          
+      </div>
+    
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2012 - 
+  2015
+  <i class="fa fa-cogs fa-spin"></i>  powered by <a href="http://hexo.io" target="_blank" class="theme-link">Hexo</a> at next
+    <div class="footer_icon">
+        <a href="http://www.qiniu.com/" target="_blank"><i class="fa fa-html5"></i></a>
+        <a href="http://cdn.console.aliyun.com/" target="_blank"><i class="fa fa-rocket"></i></a>
+    <a href="http://www.aliyun.com/" target="_blank"><i class="fa fa-skyatlas"></i></a>
+    </div>
+</div>
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if(isDesktop()){ 
+        $("#wechat").hover(function(){
+          $(".ercode").filter(':not(:animated)').fadeIn();
+          $(".sidebar-toggle").filter(':not(:animated)').fadeOut();
+          $(".back-to-top").filter(':not(:animated)').fadeOut();
+        },function(){
+          $(".ercode").fadeOut();
+          $(".sidebar-toggle").fadeIn();
+          $(".back-to-top").fadeIn();
+        })
+      }else{
+        $("#wechat").html("<i class='fa fa-qq'></i> Online");
+        $("#wechat").attr('href','http://wpa.qq.com/msgrd?v=3&uin=28568090&site=lurrpis.com&menu=yes');
+      }
+      if(isMobile()){
+        $(".nav-link").click(function(){
+            sidebarHideMotion();
+        });
+      }
+
+      function getParam(pname) { 
+        var params = location.search.substr(1);
+        var ArrParam = params.split('&');  
+        if (ArrParam.length == 1) {  
+          return params.split('=')[1];  
+        } else {  
+        for (var i = 0; i < ArrParam.length; i++) {  
+          if (ArrParam[i].split('=')[0] == pname) {  
+              return ArrParam[i].split('=')[1];  
+            }  
+          }  
+        }
+      } 
+
+      var anchor = $("#" + getParam("to"));
+      if (anchor.length > 0) {
+         var pos = anchor.offset().top;  
+         var poshigh = anchor.height();  
+         $("html,body").animate({ scrollTop: pos-poshigh }, 1000);
+      } 
+
+      var body = $('body');
+      var isSidebarVisible = false;
+      var sidebarToggle = $('.sidebar-toggle');
+      var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+      var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+      var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+      var sidebar = $('.sidebar');
+
+      var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+      var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+      var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+      var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+      var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+      var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+      var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+      sidebatToggleMotion();
+      postsListMotion();
+      backToTopMotion();
+
+      function sidebarContentMotion () {
+        $('.sidebar .motion-element').velocity(
+          'transition.slideRightIn',
+          {stagger: 50, drag: true}
+        );
+      }
+
+      function backToTopMotion () {
+        var b2top = $('.back-to-top');
+        b2top.on('click', function () {
+          body.velocity('scroll');
+        });
+      }
+
+      function sidebarShowMotion () {
+        var sidebarDisplayDuration = 300;
+        if(isMobile())
+          var sidebarWidth = '100%';
+        else
+          var sidebarWidth = '320px';
+
+        sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+        sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+        sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+        sidebar.velocity({width: sidebarWidth}, sidebarDisplayDuration);
+        isDesktop() && body.velocity({paddingRight: sidebarWidth}, sidebarDisplayDuration);
+        sidebarContentMotion();
+      }
+
+      function sidebarHideMotion () {
+        isDesktop() && body.velocity({paddingRight: 0});
+        sidebar.velocity('reverse');
+
+        sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+      };
+
+      function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+      function sidebatToggleMotion () {
+        sidebarToggle.on('click', function () {
+          isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+          isSidebarVisible = !isSidebarVisible;
+        });
+        if(isDesktop()){
+          sidebarToggle.hover(function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+          }, function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+          });
+        }
+      }
+    });
+
+    function isDesktop () {
+      return screen.width > 991;
+    }
+
+    function isTablet () {
+      return screen.width < 992 && screen.width > 767;
+    }
+
+    function isMobile () {
+      return screen.width < 767;
+    }
+  </script>
+
+  
+  
+  <script type="text/javascript" id="helpers.escapeSelector">
+    function escapeSelector (selector) {
+      return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+    }
+  </script>
+
+  
+    <script type="text/javascript" id="post-details-motion">
+      $(document).ready(function () {
+        var html = $('html');
+
+        $('.sidebar-nav li').on('click', function () {
+          var item = $(this);
+          var activeTabClassName = 'sidebar-nav-active';
+          var activePanelClassName = 'sidebar-panel-active';
+          if (item.hasClass(activeTabClassName)) {
+            return;
+          }
+
+          var currentTarget = $('.' + activePanelClassName);
+          var target = $('.' + item.data('target'));
+
+          currentTarget.velocity('transition.slideUpOut', 200, function () {
+            target
+              .velocity('stop')
+              .velocity('transition.slideDownIn', 200)
+              .addClass(activePanelClassName);
+          });
+
+          item.siblings().removeClass(activeTabClassName);
+          item.addClass(activeTabClassName);
+        });
+
+        $('.post-toc a,.tocomments').on('click', function (e) {
+          e.preventDefault();
+          var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+          html.velocity('stop').velocity('scroll', {
+            offset: offset  + 'px',
+            mobileHA: false
+          });
+        });
+
+        // Expand sidebar on post detail page by default, when post has a toc.
+        var $tocContent = $('.post-toc-content');
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+      });
+    </script>
+  
+
+  <script type="text/javascript" id="bootstrap.scrollspy">
+    /* ========================================================================
+    * Bootstrap: scrollspy.js v3.3.2
+    * http://getbootstrap.com/javascript/#scrollspy
+    * ========================================================================
+    * Copyright 2011-2015 Twitter, Inc.
+    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+    * ======================================================================== */
+
+
+    +function ($) {
+      'use strict';
+
+      // SCROLLSPY CLASS DEFINITION
+      // ==========================
+
+      function ScrollSpy(element, options) {
+        this.$body          = $(document.body)
+        this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+        this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+        this.selector       = (this.options.target || '') + ' .nav li > a'
+        this.offsets        = []
+        this.targets        = []
+        this.activeTarget   = null
+        this.scrollHeight   = 0
+
+        this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+        this.refresh()
+        this.process()
+      }
+
+      ScrollSpy.VERSION  = '3.3.2'
+
+      ScrollSpy.DEFAULTS = {
+        offset: 10
+      }
+
+      ScrollSpy.prototype.getScrollHeight = function () {
+        return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+      }
+
+      ScrollSpy.prototype.refresh = function () {
+        var that          = this
+        var offsetMethod  = 'offset'
+        var offsetBase    = 0
+
+        this.offsets      = []
+        this.targets      = []
+        this.scrollHeight = this.getScrollHeight()
+
+        if (!$.isWindow(this.$scrollElement[0])) {
+          offsetMethod = 'position'
+          offsetBase   = this.$scrollElement.scrollTop()
+        }
+
+        this.$body
+          .find(this.selector)
+          .map(function () {
+            var $el   = $(this)
+            var href  = $el.data('target') || $el.attr('href')
+            var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+            return ($href
+              && $href.length
+              && $href.is(':visible')
+              && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+          })
+          .sort(function (a, b) { return a[0] - b[0] })
+          .each(function () {
+            that.offsets.push(this[0])
+            that.targets.push(this[1])
+          })
+
+
+      }
+
+      ScrollSpy.prototype.process = function () {
+        var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+        var scrollHeight = this.getScrollHeight()
+        var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+        var offsets      = this.offsets
+        var targets      = this.targets
+        var activeTarget = this.activeTarget
+        var i
+
+        if (this.scrollHeight != scrollHeight) {
+          this.refresh()
+        }
+
+        if (scrollTop >= maxScroll) {
+          return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+        }
+
+        if (activeTarget && scrollTop < offsets[0]) {
+          this.activeTarget = null
+          return this.clear()
+        }
+
+        for (i = offsets.length; i--;) {
+          activeTarget != targets[i]
+            && scrollTop >= offsets[i]
+            && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+            && this.activate(targets[i])
+        }
+      }
+
+      ScrollSpy.prototype.activate = function (target) {
+        this.activeTarget = target
+
+        this.clear()
+
+        var selector = this.selector +
+          '[data-target="' + target + '"],' +
+          this.selector + '[href="' + target + '"]'
+
+        var active = $(selector)
+          .parents('li')
+          .addClass('active')
+
+        if (active.parent('.dropdown-menu').length) {
+          active = active
+            .closest('li.dropdown')
+            .addClass('active')
+        }
+
+        active.trigger('activate.bs.scrollspy')
+      }
+
+      ScrollSpy.prototype.clear = function () {
+        $(this.selector)
+          .parentsUntil(this.options.target, '.active')
+          .removeClass('active')
+      }
+
+
+      // SCROLLSPY PLUGIN DEFINITION
+      // ===========================
+
+      function Plugin(option) {
+        return this.each(function () {
+          var $this   = $(this)
+          var data    = $this.data('bs.scrollspy')
+          var options = typeof option == 'object' && option
+
+          if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+          if (typeof option == 'string') data[option]()
+        })
+      }
+
+      var old = $.fn.scrollspy
+
+      $.fn.scrollspy             = Plugin
+      $.fn.scrollspy.Constructor = ScrollSpy
+
+
+      // SCROLLSPY NO CONFLICT
+      // =====================
+
+      $.fn.scrollspy.noConflict = function () {
+        $.fn.scrollspy = old
+        return this
+      }
+
+
+      // SCROLLSPY DATA-API
+      // ==================
+
+      $(window).on('load.bs.scrollspy.data-api', function () {
+        $('[data-spy="scroll"]').each(function () {
+          var $spy = $(this)
+          Plugin.call($spy, $spy.data())
+        })
+      })
+
+    }(jQuery);
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('body').scrollspy({ target: '.post-toc' });
+    });
+  </script>
+
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"lurrpis"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+</body>
+</html>

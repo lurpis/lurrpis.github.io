@@ -1,0 +1,861 @@
+<!doctype html>
+<html class="next-plus use-motion">
+<head>
+  
+    
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0rc2"/>
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/awesome/css/font-awesome.min.css?v=4.3.0"/>
+
+
+
+    <meta name="description" content="关注移动互联网、WEB后端开发、服务器运维等，苦逼全栈程序猿的自留地。" />
+
+
+
+
+    <meta name="keywords" content="Laravel,PHP,运维,Hexo,技术博客" />
+
+
+
+    <link rel="alternate" href="/atom.xml" title="lurrpis" type="application/atom+xml" />
+
+
+
+    <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.3.0rc2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <title> lurrpis </title>
+</head>
+
+<body>
+  <div class="container one-column 
+   page-home 
+">
+    <div id="header" class="header">
+      <div class="headband"></div>
+        <div class="wrap">
+    <div class="inner">
+        <span class="head-title">
+            <a class="hvr-underline-from-center" href="/">LURRPIS</a>
+        </span>
+        
+        <ul class="nav-menu">
+        
+         
+            <li>
+                <a href="/" class="hvr-underline-from-center">首页</a>
+            </li>
+            
+         
+            <li>
+                <a href="/archives" class="hvr-underline-from-center">归档</a>
+            </li>
+            
+         
+            <li>
+                <a href="/tags" class="hvr-underline-from-center">标签</a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/23.html">
+                运维小技巧:为你的SSH添加被爆破记录
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-25
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/23.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="23.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h3 id="前言">前言</h3><blockquote>
+<p>默认的ssh日志是不带密码记录功能的，现在想把登录密码记录下来，这样就可以搜集黑客的ssh爆破的字典了。具体操作就是给默认的ssh代码增加一个patch。</p>
+</blockquote>
+<h3 id="操作">操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://openbsd.cs.toronto.edu/pub/OpenBSD/OpenSSH/portable/openssh-<span class="number">6.6</span>p1.tar.gz</span><br><span class="line">tar xzvf openssh-<span class="number">6.6</span>p1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> openssh-<span class="number">6.6</span>p1</span><br></pre></td></tr></table></figure>
+<p>在当前目录下新建一个patch文件<code>sshlog.patch</code>，代码如下：<br><figure class="highlight nimrod"><table><tr><td class="code"><pre><span class="line">--- auth-passwd.c       <span class="number">2012</span>-<span class="number">04</span>-<span class="number">25</span> <span class="number">19</span>:<span class="number">51</span>:<span class="number">28</span>.<span class="number">000000000</span> -<span class="number">0400</span></span><br><span class="line">+++ auth-passwd-sshlog.c        <span class="number">2014</span>-<span class="number">02</span>-<span class="number">11</span> <span class="number">12</span>:<span class="number">19</span>:<span class="number">42</span>.<span class="number">000000000</span> -<span class="number">0500</span></span><br><span class="line">@@ -<span class="number">82</span>,<span class="number">6</span> +<span class="number">82</span>,<span class="number">7</span> @@</span><br><span class="line"> &#123;</span><br><span class="line">        struct passwd * pw = authctxt-&gt;pw;</span><br><span class="line">        <span class="type">int</span> <span class="literal">result</span>, ok = authctxt-&gt;valid;</span><br><span class="line">+    logit(<span class="string">"sshlog: %s %s"</span>, authctxt-&gt;user, password);</span><br><span class="line"> <span class="comment">#if defined(USE_SHADOW) &amp;&amp; defined(HAS_SHADOW_EXPIRE)</span></span><br><span class="line">        <span class="keyword">static</span> <span class="type">int</span> expire_checked = <span class="number">0</span>;</span><br><span class="line"> <span class="comment">#endif</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">patch --dry-run &lt; sshlog.patch</span><br><span class="line">patch  &lt; sshlog.patch</span><br></pre></td></tr></table></figure>
+<p>备份之前的ssh配置文件<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mv /etc/ssh/ /etc/ssh_old</span><br><span class="line">./configure --prefix=/usr --sysconfdir=/etc/ssh --without-zlib-version-check  --with-md5-passwords --mandir=/usr/share/man</span><br><span class="line">/etc/init.d/sshd restart</span><br></pre></td></tr></table></figure></p>
+<h3 id="演示">演示</h3><p>SSH爆破时候的密码会被记录在<code>/var/log/messages</code>里<br>可以看到此时服务器还在被爆破着。。。<br><img src="http://static.blog.lurrpis.com/file0001.jpg" alt="ssh"><br>通过<code>d3.js</code>可以图形化爆破的次数更直观（以下服务器7天内被爆破的次数）<br><img src="http://static.blog.lurrpis.com/2.jpg" alt="ssh"></p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/SSH安全记录/">
+                #SSH安全记录
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/添加SSH日志/">
+                #添加SSH日志
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/21.html">
+                检测你的Xcode中是否有CIA的后门
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-23
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/21.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="21.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <p>根据斯诺登近期爆料的文件显示，CIA在美国桑迪亚Sandia国家实验室开发了一款流氓版Xcode。这个版本的Xcode会在苹果开发者的电脑中植入后门，窃取他们的个人开发密钥<code>private codesign key</code>。</p>
+<p><img src="http://static.blog.lurrpis.com/1.png" alt="CIA后门"></p>
+<p>那么如何检测这个后门呢？我们可以通过检测被这个后门所篡改的安全机制是否能正确的运行来验证。根据斯诺登披露的文件，该后门篡改了securityd守护进程，使得在导出开发者密钥的时候并不向用户发出警告。</p>
+<blockquote>
+<p><strong>后门重写了securityd，使在导出开发者密钥的时候并不向用户弹出警告</strong></p>
+</blockquote>
+<p>所以最好的测试方法就是试着导出你的开发者密钥，看看securityd会不会发出警告，以获取你的同意。</p>
+<p>根据这篇文章，你会知道如何导出个人密钥：</p>
+<ol>
+<li>在<code>Xcode Preference</code>窗口中，单击<code>Accounts</code></li>
+<li>点击做下角的<code>Action</code>按钮（在minus按钮的右边）</li>
+<li>在弹出窗口中选择<code>Export Accounts</code></li>
+</ol>
+<p>此时，securityd应该弹出一个窗口，询问你是否允许导出你的密钥。</p>
+<p><img src="http://static.blog.lurrpis.com/2.png" alt="CIA后门"></p>
+<p>如果你没有看到弹出窗口，那你很可能就中招了，后门会在你不知情的情况下导出你的密钥。</p>
+<p>因为我们并没有拿到这款据称由CIA篡改的Xcode，所以我们并不能肯定该方法一定有效。但根据曝出的幻灯片中的信息，起码在特定情况下，这种检测是有效的。</p>
+<p>[via@<a href="http://bobao.360.cn/news/detail/1302.html" target="_blank">360bobao</a>]</p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/斯诺登/">
+                #斯诺登
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/检测Xcode后门/">
+                #检测Xcode后门
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/棱镜门/">
+                #棱镜门
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/20.html">
+                3.15晚会黑客WiFi实现全教程，WiFi捕获和中间人攻击
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-20
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/20.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="20.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h4 id="前言">前言</h4><blockquote>
+<p>先说明一下，这个文章不是我写的，是一个老外<code>Deepanshu Kapoor</code>安全专家写的，我一开始就是看着玩，但整个看完被老外那个细心和耐心给打动了，整个过程其实很简单，但是老外分了好多步骤来讲解，每个步骤都有配图和说明，甚至命令的参数都要解释一下。不得不佩服老外分享和奉献的精神，所以我也学着奉献一下，把它翻译成中文给大家看看吧，我尽量保持原汁原味，有不恰当的地方要原谅我，毕竟我不是专业翻译。（对原文PDF文档感兴趣的留邮箱，我发给你）</p>
+</blockquote>
+<h4 id="BT5_+_wireshark玩wifi数据包捕获和session注入(中间人攻击)">BT5 + wireshark玩wifi数据包捕获和session注入(中间人攻击)</h4><h4 id="介绍">介绍</h4><p>主要思路是通过伪造相同名称的wifi接入点，配合发送ARP数据包，攻击连入伪造wifi的用户。一个与原有wifi相同名称的伪造接入点一旦建立，会导致用户从原有链接中断开，并连入你所建立的伪造接入点中，因此所有的通信通道都会流经我的系统，届时我们通常会用session注入的方式拿到用户所有的细节/授信状态/信息等。</p>
+<h4 id="必备神器">必备神器</h4><ol>
+<li>BT5（Backtrack操作系统）</li>
+<li>虚拟机（带USB设备）</li>
+<li>可联网的主机</li>
+</ol>
+<h4 id="第一步">第一步</h4><p>开BT5的<code>terminal</code>终端，然后输入<code>iwconfig</code>检查无线网卡。<br><strong>说明：</strong><br><code>iwconfig</code>类似于<code>ifconfig</code>，但是是用于无线网络的。它经常被用来设置无线网卡的参数。<br><img src="http://static.blog.lurrpis.com/wifi1.png" alt="image"></p>
+<h4 id="第二步">第二步</h4><p>输入<code>airmon-ng start wlan0</code>开启无线网卡。<br><strong>说明：</strong><br>这个命令可以被用来让无线网卡处于监听状态。也可以被用来从监听模式中恢复成管理模式。输入<code>airmon-ng</code>不带参数，可以显示网卡状态。<br><code>wlan0</code>是指wifi网卡。<br><code>wlan</code>是无线局域网， <code>0</code>是你的网卡编号。<br><img src="http://static.blog.lurrpis.com/wifi2.png" alt="image"></p>
+<h4 id="第三步">第三步</h4><p>在网卡已经启动了监听模式后，输入<code>airodump-ng mon0</code>就可以开始抓包了。<br><strong>说明：</strong><br><code>airodump-ng</code>可以用来抓<code>802.11</code>的原始帧数据包，特别适合于收集WEP的初始化向量用于<code>aircrack-ng</code>的破解。<code>Airodump-ng</code>也能够用来记录找到的接入点的坐标。<br><code>mon0</code>在监听模式下和wlan0的意思是一样的。<br>一旦你把<code>wlan0</code>设置为<code>监听模式</code>，<code>wlan0</code>就要改为<code>mon0</code>。<br><img src="http://static.blog.lurrpis.com/wifi3.png" alt="image"></p>
+<h4 id="第四步">第四步</h4><p>设置在<code>airodump-ng</code>中显示的频道ID，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iwconfig mon0 channel <span class="number">5</span></span><br><span class="line">iwconfig wlan0 channel <span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iwconfig wlan0 channel <span class="number">5</span></span><br><span class="line">iwconfig mon0 channel <span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br>参数<code>channel</code>用来选定一个单独的特殊频道。<br><img src="http://static.blog.lurrpis.com/wifi4.png" alt="image"></p>
+<h4 id="第五步">第五步</h4><p>现在开始建立你的伪造路由器，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">airbase-ng - e <span class="string">"belkin.3448"</span> mon0</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br><code>airbase-ng</code>是个多用途的工具，可针对AP（接入点）自身的客户端进行攻击，主要的思路是驱使客户端去连接伪造的AP，不是阻止客户端去连接真实AP。<br><code>-e + SSID</code>指定伪造AP的<code>SSID</code>名称。<br><img src="http://static.blog.lurrpis.com/wifi5.png" alt="image"></p>
+<h4 id="第六步">第六步</h4><p>现在是时候去<code>桥接</code>所有的网络了，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brctl addbr mitm</span><br><span class="line">brctl addif mitm eth0</span><br><span class="line">brctl addif mitm at0</span><br></pre></td></tr></table></figure></p>
+<p>中间人就是<code>&lt;interface name&gt;</code> 。<br>（这句话看原文直接翻译有些难以理解，实际上作者就是想说<code>at0</code>这个网卡架起来的网桥就是个中间人，攻击就是在这里完成的。—–译者注）</p>
+<p><strong>说明：</strong><br><code>Brctl</code> 用来在两个网卡之间建立桥接网络。<br><code>Addbr</code> 用来添加网桥的对象，用<code>&lt;name&gt;</code>来指定网桥的名称。<br><code>Addif</code> 给已经使用<code>addbr</code>创建的网桥中添加一个网卡，后边的参数使用你要添加的网卡名称即可。<br><img src="http://static.blog.lurrpis.com/wifi6.png" alt="image"></p>
+<h4 id="第七步">第七步</h4><p>现在创建一个新的网卡配置，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig eth0 <span class="number">0.0</span>.<span class="number">0.0</span> up</span><br><span class="line">ifconfig at0 <span class="number">0.0</span>.<span class="number">0.0</span> up</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br><code>ifconfig</code>不用多说了，用来配置网卡，大家经常用的。<br><img src="http://static.blog.lurrpis.com/wifi7.png" alt="image"></p>
+<h4 id="第八步">第八步</h4><p>现在可以启动我们用来做中间人攻击的网桥了！命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig mitm up</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br>配置完成的网桥可以使用<code>ifconfig</code>来启用。<br><img src="http://static.blog.lurrpis.com/wifi8.png" alt="image"></p>
+<h4 id="第九步">第九步</h4><p>现在使用下面的命令发送认证包到路由器上，<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">aireplay-ng - - deauth <span class="number">0</span> - a <span class="number">94</span>:<span class="number">44</span>:<span class="number">52</span>:DA:B4:<span class="number">28</span> mon0</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br><code>aireplay-ng</code>用来注入帧数据。<br><code>-a</code>指定被攻击者的<code>BSSID</code>。<br><code>94:44:52:DA:B4:28</code>这个是被攻击者的<code>BSSID</code>。<br><img src="http://static.blog.lurrpis.com/wifi9.png" alt="image"></p>
+<h4 id="第十步">第十步</h4><p>现在开始给被攻击者分配IP，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dhclient3 mitm&amp;</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dhclient3 mitm &amp;</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br>使用类似<code>DHCP</code>的协议方式分配<code>IP</code>。<br><img src="http://static.blog.lurrpis.com/wifi10.png" alt="image"></p>
+<h4 id="第十一步">第十一步</h4><p>现在你可以看看是不是有客户端已经连接上了，有的话会显示在<code>第五步</code>的那个命令终端里面。<br><img src="http://static.blog.lurrpis.com/wifi11.png" alt="image"></p>
+<h4 id="第十二步">第十二步</h4><p>开<code>wireshark</code>，命令如下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wireshark&amp;</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong><br><code>wireshark</code>是个网络协议抓包分析器。<br><img src="http://static.blog.lurrpis.com/wifi12.png" alt="image"></p>
+<h4 id="第十三步">第十三步</h4><p>选择网卡，点开始<code>（start）</code><br><img src="http://static.blog.lurrpis.com/wifi13.png" alt="image"></p>
+<h4 id="第十四步">第十四步</h4><p>输入<code>http contains POST</code>过滤一下，然后你就可以看到所有抓下来的数据包了。<br><img src="http://static.blog.lurrpis.com/wifi14.png" alt="image"><br><figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line"><span class="label">http:</span>//exploit.deepanshukapoor<span class="preprocessor">.org</span>/admin.php</span><br><span class="line">Username – john </span><br><span class="line">Password – <span class="number">1234</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.blog.lurrpis.com/wifi15.png" alt="image"></p>
+<blockquote class="blockquote-center" style="margin:120px 0px;"><i class="fa fa-ban"></i> 声明<br>本文章仅供交流学习使用<br>请勿外出实(zuo)践(si)<br></blockquote>
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/3-15黑客wifi/">
+                #3.15黑客wifi
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/黑客wifi教程/">
+                #黑客wifi教程
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/17.html">
+                WordPress分类页代码
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-17
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/17.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="17.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h3 id="前言">前言</h3><p>今天做需求时，突然发现很久以前使用WordPress写的一个项目的分类功能不能使用了，分类页面内的文章并没有进行分类，原来是WordPress之后更新，出现了兼容性BUG</p>
+<h4 id="文件路径">文件路径</h4><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">webroot/wp-<span class="attribute">content</span>/themes/xxx/archive<span class="class">.php</span>  <span class="comment">//分类模板</span></span><br></pre></td></tr></table></figure>
+<p>查找<code>have_posts()</code>，一般这句话之下就是文章列表遍历<br>在<code>have_posts()</code>之上插入，<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$categories</span> = get_the_category(<span class="variable">$post</span>-&gt;ID);</span><br><span class="line"><span class="variable">$args</span> = <span class="keyword">array</span>(</span><br><span class="line">                <span class="string">'cat'</span>=&gt;<span class="variable">$categories</span>[<span class="number">0</span>]-&gt;term_id,   <span class="comment">//当前分类文章</span></span><br><span class="line">                <span class="string">'showposts'</span> =&gt; <span class="number">20</span>,  <span class="comment">//文章列表分页</span></span><br><span class="line">                <span class="string">'paged'</span> =&gt; <span class="variable">$paged</span></span><br><span class="line">            );</span><br><span class="line">            query_posts(<span class="variable">$args</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="做个广告">做个广告</h4><p><a href="http://www.evhui.com" target="_blank" style="color:red">电车汇 evhui.com</a>是一个聚合关于新能源电动车的最新政策，国家福利，新能源补贴，评测，充电桩定位(后续产品)的电车资源首发网站。</p>
+<p>一开始让我说他们有独家政策补贴消息其实我是拒绝的，因为，你不能让我说，我就马上去说，第一我要试一下，因为我不愿意说完了以后再加一些特技上去，政策补贴duang~~一下，很多，很假，这样人们出来一定会骂我，根本没有这样的补贴，就证明上面那个是假的，后来我也经过证实他们消息确实是独家的，我关注了大概一个月左右，感觉还不错，后来我在的时候也要求他们不要加特技，因为我要让人们看到，算好政策补贴买电动车 <i class="fa fa-car"></i> 就像买电动车 <i class="fa fa-bicycle"></i></p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/WordPress/">
+                #WordPress
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/12.html">
+                如何在Laravel中使用SMTP发送邮件(适用于各主流邮箱)
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-13
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/12.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="12.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <blockquote>
+<p>Laravel 提供了非常简单的邮件发送 API，但是文档却不是太清晰，再加上它采用传递闭包（回调函数）的方式调用，导致邮件发送的使用门槛偏高。</p>
+<p>Laravel 4 和 Laravel 5 的邮件发送使用方式完全一致。Laravel 5 的邮件发送中文文档在：<a href="http://laravel-china.org/docs/5.0/mail" target="_blank" rel="external">http://laravel-china.org/docs/5.0/mail</a></p>
+<p>本文中，我将以 163 邮箱为例，展示如何用 Laravel 内置的邮件发送类来发送邮件。</p>
+</blockquote>
+<h3 id="配置">配置</h3><p>修改邮件发送配置。4.2 在 <code>app/config/mail.php</code>，5 在 <code>config/mail.php</code>，修改以下配置：<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="string">'host'</span> =&gt; <span class="string">'smtp.163.com'</span>,</span><br><span class="line"><span class="string">'port'</span> =&gt; <span class="number">25</span>,</span><br><span class="line"><span class="string">'from'</span> =&gt; <span class="keyword">array</span>(<span class="string">'address'</span> =&gt; <span class="string">'***@163.com'</span>, <span class="string">'name'</span> =&gt; <span class="string">'TestMail'</span>),</span><br><span class="line"><span class="string">'username'</span> =&gt; <span class="string">'***@163.com'</span>, <span class="comment">// 注意，这里必须和上一行配置里面的邮件地址一致</span></span><br><span class="line"><span class="string">'password'</span> =&gt; <span class="string">'****'</span>,</span><br></pre></td></tr></table></figure></p>
+<h3 id="发送">发送</h3><p>在控制器或者模型里，调用以下代码：<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$data</span> = [<span class="string">'email'</span>=&gt;<span class="variable">$email</span>, <span class="string">'name'</span>=&gt;<span class="variable">$name</span>, <span class="string">'uid'</span>=&gt;<span class="variable">$uid</span>, <span class="string">'activationcode'</span>=&gt;<span class="variable">$code</span>];</span><br><span class="line"><span class="keyword">return</span> Mail::send(<span class="string">'activemail'</span>, <span class="variable">$data</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$message</span>)</span> <span class="title">use</span><span class="params">(<span class="variable">$data</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="variable">$message</span>-&gt;to(<span class="variable">$data</span>[<span class="string">'email'</span>], <span class="variable">$data</span>[<span class="string">'name'</span>])-&gt;subject(<span class="string">'欢迎注册我们的网站，请激活您的账号！'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>邮件视图为 <code>views/activemail.blade.php</code>：<br><figure class="highlight handlebars"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="doctype">&lt;!doctype html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">html</span> <span class="attribute">lang</span>=<span class="value">"zh-CN"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"X-UA-Compatible"</span> <span class="attribute">content</span>=<span class="value">"IE=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"</span></span></span><span class="expression">&#123;&#123; <span class="variable">URL</span>('<span class="variable">active</span>?<span class="variable">uid</span>='<span class="variable">.</span>$<span class="variable">uid.</span>'&amp;<span class="variable">activationcode</span>='<span class="variable">.</span>$<span class="variable">activationcode</span>) &#125;&#125;</span><span class="xml"><span class="tag"><span class="value">"</span> <span class="attribute">target</span>=<span class="value">"_blank"</span>&gt;</span>点击激活你的账号<span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="搞定!">搞定!</h3><hr>
+<p>转载自吕文瀚-岁寒<a href="http://lvwenhan.com/laravel/436.html" target="_blank" rel="external">http://lvwenhan.com/laravel/436.html</a></p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/laravel/">
+                #laravel
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/发送邮件/">
+                #发送邮件
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+
+          </div>
+
+          
+            <div class="pagination">
+              <a class="extend prev" rel="prev" href="/page/3/">&laquo;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/5/">&raquo;</a>
+            </div>
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="http://static.blog.lurrpis.com/logo/500x500.png" alt="LURRPIS" />
+        <p class="site-author-name">LURRPIS<a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></p>
+      </div>
+      <p class="site-description motion-element">快速积累，静待时机</p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">文章</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">102</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      <div class="social-info motion-element">
+            <span class="soclial-item">
+              <a href="https://github.com/lurrpis" target="_blank"><i class="fa fa-github-alt"></i> GitHub</a>
+            </span>
+            <span class="soclial-item">
+              <a href="http://weibo.com/lurrpis" target="_blank"><i class="fa fa-weibo"></i> WeiBo</a>
+            </span>
+            <span class="soclial-item">
+              <a href="javascript:void(0)" target="_blank" id="wechat"><i class="fa fa-weixin"></i> WeChat</a>
+            </span>
+            <div class="div-email">
+              <span class="soclial-item">
+                <a href="mailto:hi@lurrpis.com" target="_blank"><i class="fa fa-paper-plane"></i> Email:hi@lurrpis.com</a>
+              </span>
+            </div>
+            <div class="ercode">
+              <img src="http://static.blog.lurrpis.com/wechat/ercode_fixed.png">
+            </div>
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2012 - 
+  2015
+  <i class="fa fa-cogs fa-spin"></i>  powered by <a href="http://hexo.io" target="_blank" class="theme-link">Hexo</a> at next
+    <div class="footer_icon">
+        <a href="http://www.qiniu.com/" target="_blank"><i class="fa fa-html5"></i></a>
+        <a href="http://cdn.console.aliyun.com/" target="_blank"><i class="fa fa-rocket"></i></a>
+    <a href="http://www.aliyun.com/" target="_blank"><i class="fa fa-skyatlas"></i></a>
+    </div>
+</div>
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200, sequenceQueue: false } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    });
+  </script>
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if(isDesktop()){ 
+        $("#wechat").hover(function(){
+          $(".ercode").filter(':not(:animated)').fadeIn();
+          $(".sidebar-toggle").filter(':not(:animated)').fadeOut();
+          $(".back-to-top").filter(':not(:animated)').fadeOut();
+        },function(){
+          $(".ercode").fadeOut();
+          $(".sidebar-toggle").fadeIn();
+          $(".back-to-top").fadeIn();
+        })
+      }else{
+        $("#wechat").html("<i class='fa fa-qq'></i> Online");
+        $("#wechat").attr('href','http://wpa.qq.com/msgrd?v=3&uin=28568090&site=lurrpis.com&menu=yes');
+      }
+      if(isMobile()){
+        $(".nav-link").click(function(){
+            sidebarHideMotion();
+        });
+      }
+
+      function getParam(pname) { 
+        var params = location.search.substr(1);
+        var ArrParam = params.split('&');  
+        if (ArrParam.length == 1) {  
+          return params.split('=')[1];  
+        } else {  
+        for (var i = 0; i < ArrParam.length; i++) {  
+          if (ArrParam[i].split('=')[0] == pname) {  
+              return ArrParam[i].split('=')[1];  
+            }  
+          }  
+        }
+      } 
+
+      var anchor = $("#" + getParam("to"));
+      if (anchor.length > 0) {
+         var pos = anchor.offset().top;  
+         var poshigh = anchor.height();  
+         $("html,body").animate({ scrollTop: pos-poshigh }, 1000);
+      } 
+
+      var body = $('body');
+      var isSidebarVisible = false;
+      var sidebarToggle = $('.sidebar-toggle');
+      var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+      var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+      var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+      var sidebar = $('.sidebar');
+
+      var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+      var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+      var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+      var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+      var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+      var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+      var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+      sidebatToggleMotion();
+      postsListMotion();
+      backToTopMotion();
+
+      function sidebarContentMotion () {
+        $('.sidebar .motion-element').velocity(
+          'transition.slideRightIn',
+          {stagger: 50, drag: true}
+        );
+      }
+
+      function backToTopMotion () {
+        var b2top = $('.back-to-top');
+        b2top.on('click', function () {
+          body.velocity('scroll');
+        });
+      }
+
+      function sidebarShowMotion () {
+        var sidebarDisplayDuration = 300;
+        if(isMobile())
+          var sidebarWidth = '100%';
+        else
+          var sidebarWidth = '320px';
+
+        sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+        sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+        sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+        sidebar.velocity({width: sidebarWidth}, sidebarDisplayDuration);
+        isDesktop() && body.velocity({paddingRight: sidebarWidth}, sidebarDisplayDuration);
+        sidebarContentMotion();
+      }
+
+      function sidebarHideMotion () {
+        isDesktop() && body.velocity({paddingRight: 0});
+        sidebar.velocity('reverse');
+
+        sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+      };
+
+      function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+      function sidebatToggleMotion () {
+        sidebarToggle.on('click', function () {
+          isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+          isSidebarVisible = !isSidebarVisible;
+        });
+        if(isDesktop()){
+          sidebarToggle.hover(function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+          }, function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+          });
+        }
+      }
+    });
+
+    function isDesktop () {
+      return screen.width > 991;
+    }
+
+    function isTablet () {
+      return screen.width < 992 && screen.width > 767;
+    }
+
+    function isMobile () {
+      return screen.width < 767;
+    }
+  </script>
+
+  
+  
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"lurrpis"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+</body>
+</html>

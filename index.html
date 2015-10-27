@@ -1,0 +1,808 @@
+<!doctype html>
+<html class="next-plus use-motion">
+<head>
+  
+    
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0rc2"/>
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/awesome/css/font-awesome.min.css?v=4.3.0"/>
+
+
+
+    <meta name="description" content="关注移动互联网、WEB后端开发、服务器运维等，苦逼全栈程序猿的自留地。" />
+
+
+
+
+    <meta name="keywords" content="Laravel,PHP,运维,Hexo,技术博客" />
+
+
+
+    <link rel="alternate" href="/atom.xml" title="lurrpis" type="application/atom+xml" />
+
+
+
+    <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.3.0rc2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <title> lurrpis </title>
+</head>
+
+<body>
+  <div class="container one-column 
+   page-home 
+">
+    <div id="header" class="header">
+      <div class="headband"></div>
+        <div class="wrap">
+    <div class="inner">
+        <span class="head-title">
+            <a class="hvr-underline-from-center" href="/">LURRPIS</a>
+        </span>
+        
+        <ul class="nav-menu">
+        
+         
+            <li>
+                <a href="/" class="hvr-underline-from-center">首页</a>
+            </li>
+            
+         
+            <li>
+                <a href="/archives" class="hvr-underline-from-center">归档</a>
+            </li>
+            
+         
+            <li>
+                <a href="/tags" class="hvr-underline-from-center">标签</a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/77.html">
+                How to configure the nginx with Wordpress&Codeigniter
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-09-15
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/77.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="77.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h3 id="前言">前言</h3><p>项目由<code>Apache</code>迁移至<code>Nginx</code>由于重写原因导致<code>Wordpress</code>中的<code>Codeignter</code>在<code>Nginx</code>下无法正常运行</p>
+<p><img class="noborder" src="http://static.blog.lurrpis.com/images/500_error.png" alt="500_error"></p>
+<p>Google,StackOverflow <a href="http://stackoverflow.com/questions/32503693/codeigniter-in-wordpress-how-to-config-nginx" target="_blank" rel="external">问题链接</a>,并自行多次尝试配置<code>nginx server config</code>后依然无果。</p>
+<h3 id="解决方法">解决方法</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="title">server</span> &#123;</span><br><span class="line">    <span class="title">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="title">server_name</span> nginx.local.com;</span><br><span class="line">    <span class="title">root</span> /var/projects/root;</span><br><span class="line">    <span class="title">error_log</span>  /var/projects/log/error.log <span class="built_in">warn</span>;</span><br><span class="line">    <span class="title">access_log</span>  /var/projects/log/access.log main;</span><br><span class="line"></span><br><span class="line">    <span class="title">if</span> (<span class="variable">$host</span> != <span class="string">'nginx.local.com'</span>)&#123;</span><br><span class="line">       <span class="title">rewrite</span><span class="regexp"> ^/(.*)</span> <span class="url">http://nginx.local.com/<span class="variable">$1</span></span> <span class="built_in">permanent</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title">location</span> / &#123;</span><br><span class="line">        <span class="title">index</span> index.php index.html index.html;</span><br><span class="line">        <span class="title">if</span> (!-e <span class="variable">$request_filename</span>) &#123;</span><br><span class="line">            <span class="title">rewrite</span><span class="regexp"> ^.+?(/wp-.*)</span> <span class="variable">$1</span> <span class="built_in">last</span>;</span><br><span class="line">            <span class="title">rewrite</span><span class="regexp"> ^.+?(/.*\.php)$</span> <span class="variable">$1</span> <span class="built_in">last</span>;</span><br><span class="line">            <span class="title">rewrite</span><span class="regexp"> ^</span> /index.php <span class="built_in">last</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title">rewrite</span><span class="regexp"> ^.*/files/(.*)$</span> /wp-includes/ms-files.php?file=<span class="variable">$1</span> <span class="built_in">last</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#此处是 Codeignter 所在目录</span></span><br><span class="line">    <span class="title">location</span> <span class="regexp">~ /codeignter</span> &#123;</span><br><span class="line">        <span class="title">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$query_string</span>;</span><br><span class="line">        <span class="title">location</span> <span class="regexp">~ \.php($|/)</span> &#123;</span><br><span class="line">            <span class="title">fastcgi_pass</span>   <span class="number">127.0.0.1:9000</span>;</span><br><span class="line">            <span class="title">fastcgi_index</span>  evindex.php;</span><br><span class="line">            <span class="title">fastcgi_split_path_info</span><span class="regexp"> ^(.+\.php)(.*)$</span>;</span><br><span class="line">            <span class="title">fastcgi_param</span>   PATH_INFO <span class="variable">$fastcgi_path_info</span>;</span><br><span class="line">            <span class="title">fastcgi_param</span>  SCRIPT_FILENAME  <span class="variable">$document_root</span><span class="variable">$fastcgi_script_name</span>;</span><br><span class="line">            <span class="title">include</span>        fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title">location</span> <span class="regexp">~ \.php$</span> &#123;</span><br><span class="line">        <span class="title">fastcgi_pass</span>   <span class="number">127.0.0.1:9000</span>;</span><br><span class="line">        <span class="title">fastcgi_index</span>  index.php;</span><br><span class="line">        <span class="title">fastcgi_param</span>  SCRIPT_FILENAME  <span class="variable">$document_root</span><span class="variable">$fastcgi_script_name</span>;</span><br><span class="line">        <span class="title">include</span>        fastcgi_params;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/codeignter/">
+                #codeignter
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/nginx/">
+                #nginx
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/wordpress/">
+                #wordpress
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/76.html">
+                Datatables 执行 ajax 之前添加自定义字段
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-08-26
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/76.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="76.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h3 id="前言">前言</h3><p>基于<code>Datatables</code>做新功能开发，发现使用<code>.fnDraw()</code>触发表格数据刷新时，其 ajax 字段不能动态获取，搜烂国内外引擎抓破头也没找到解决方案。</p>
+<blockquote>
+<p>像这样</p>
+</blockquote>
+<p><img src="http://static.blog.lurrpis.com/images/1.png" alt="image"></p>
+<blockquote>
+<p>或者这样</p>
+</blockquote>
+<p><img src="http://static.blog.lurrpis.com/images/3.png" alt="image"></p>
+<h3 id="解决方法">解决方法</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// datatable 配置</span></span><br><span class="line"><span class="keyword">var</span> DATA_TABLE_OBJ, RESPONSE_URL = <span class="string">''</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">datatable_render</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RESPONSE_URL = <span class="string">'/dashboard/info/charge_list/charge_table'</span>;</span><br><span class="line">    DATA_TABLE_OBJ = $(<span class="string">"#datatable"</span>).dataTable(&#123;</span><br><span class="line">        <span class="string">"processing"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">"serverSide"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">"ajax"</span>: &#123;</span><br><span class="line">            <span class="string">'url'</span>: RESPONSE_URL,</span><br><span class="line">            <span class="string">'type'</span>: <span class="string">'POST'</span>,</span><br><span class="line">            <span class="string">'data'</span>: &#123;</span><br><span class="line">                <span class="string">'testData'</span>:<span class="string">'Hello World'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"columns"</span>:[&#123;<span class="string">"data"</span>: <span class="string">"columns_name"</span>&#125;],</span><br><span class="line">        <span class="string">"bScrollInfinite"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$(<span class="string">'#search_btn'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    DATA_TABLE_OBJ.fnSettings().ajax.data.testData=<span class="string">'更新参数内容'</span>;</span><br><span class="line">    DATA_TABLE_OBJ.fnSettings().ajax.data.testNewData=<span class="string">'新增参数内容'</span>;</span><br><span class="line">    DATA_TABLE_OBJ.fnDraw();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/datatables/">
+                #datatables
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/jQuery/">
+                #jQuery
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/53.html">
+                Html Body 莫名加上'MacOSX ATTRV'原因及解决
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-07-09
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/53.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="53.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h4 id="前言">前言</h4><p>今天上传项目时是由Mac tar打包上传到Linux服务器解包的，部署完成后访问页面发现页面的<code>Body</code>之前都被加入了<br><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Mac</span> OS X     2��ATTRV(<span class="keyword">D</span>��-�-com.apple.quarantineq/0000;4c9151bf;Fir</span><br></pre></td></tr></table></figure></p>
+<p>一行奇怪的字符。</p>
+<h5 id="Mac环境解决方案">Mac环境解决方案</h5><p>Google后发现Mac解决方案<br><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">xattr -r -d com<span class="class">.apple</span><span class="class">.quarantine</span> file-path</span><br></pre></td></tr></table></figure></p>
+<p>原文地址<a href="http://entropytc.com/got-com-apple-quarantine-problems/" target="_blank" rel="external">http://entropytc.com/got-com-apple-quarantine-problems/</a></p>
+<p>不过在Linux下没有xattr命令，就去Linux目录下<code>ls -a</code>发现每个文件都被克隆了一个<code>._</code>开头的文件，由于检查过原始文件并未遭到改动，果然删除这些<code>._</code>开头文件即解决了问题</p>
+<h5 id="Linux解决方案_-_批量删除-_开头文件">Linux解决方案 - 批量删除._开头文件</h5><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">find ./ -<span class="property">name</span> <span class="string">"._*"</span> -exec rm -f &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/xattr/">
+                #xattr
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/52.html">
+                Hello Shanghai!
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-06-23
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/52.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="52.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h5 id="前言">前言</h5><p>有一段时间没有更新博客了，在新浪离职后奔波于武汉于上海两地，面试，托运，搬家等琐事忙的焦头烂额。面试成功两天后拿到期待中<code>Ping++</code>的Offer，心里的石头总算落地，婉拒别家面试和Offer后满意和Ping++签约。</p>
+<h5 id="入职">入职</h5><p>今天<code>2015.06.23</code>是入职<a href="https://pingxx.com" target="_blank" rel="external">https://pingxx.com</a>的第一天，<code>Ping++</code>果然一展土豪气质，办理手续的同时就给配了一台<code>MacbookPro(Ping++入职标配)</code>，轻松开放的办公环境，互联网公司别有的文化氛围，外加同事们的格外热情(有能力的人果然都是这样低调和蔼可亲)，受宠若惊，一种团队归属感油然而生！</p>
+<h5 id="革命尚未完成，还需继续努力">革命尚未完成，还需继续努力</h5><p>然而……并没有什么卵用。<br>时间不早啦，休息了，晚安！</p>
+<p><img class="noborder" src="http://static.blog.lurrpis.com/IMG_5052.JPG" alt="Ping++招聘"></p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/随笔/">
+                #随笔
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/50.html">
+                AngularJS AJAX远程表单验证
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-06-01
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/50.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="50.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h5 id="解决方法">解决方法</h5><figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">&lt;form <span class="variable">ng-app=</span><span class="string">"RegistModal"</span> <span class="variable">name=</span><span class="string">"login_form"</span>&gt;</span><br><span class="line">	Username: &lt;input <span class="variable">type=</span><span class="string">"text"</span> <span class="variable">name=</span><span class="string">"username"</span> <span class="variable">ng-minlength=</span><span class="number">5</span> <span class="variable">ng-maxlength=</span><span class="number">12</span> <span class="variable">ng-model=</span><span class="string">"login.name"</span> <span class="variable">ensure-action=</span><span class="string">"unique"</span>&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="keyword">var</span> RegistApp = angular.module(<span class="string">'RegistModal'</span>, []);</span><br><span class="line">    RegistApp.directive(<span class="string">'ensureAction'</span>, [<span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span><span class="params">($http)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="built_in">require</span>: <span class="string">'ngModel'</span>,</span><br><span class="line">            link: <span class="function"><span class="keyword">function</span><span class="params">(scope, ele, attrs, c)</span> </span>&#123;</span><br><span class="line">                scope.$watch(attrs.ngModel, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    $http(&#123;</span><br><span class="line">                        method: <span class="string">'POST'</span>,</span><br><span class="line">                        url: <span class="string">'&lt;?php echo admin_url(); ?&gt;admin-ajax.php'</span>,</span><br><span class="line">                        data: $.param(&#123;action:attrs.ensureAction,value: c.$modelValue&#125;),</span><br><span class="line">                        headers: &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>&#125;</span><br><span class="line">                    &#125;).success(<span class="function"><span class="keyword">function</span><span class="params">(data, status, headers, cfg)</span> </span>&#123;</span><br><span class="line">                        c.$setValidity(attrs.ensureAction, data.isSuccess);</span><br><span class="line">                    &#125;).error(<span class="function"><span class="keyword">function</span><span class="params">(data, status, headers, cfg)</span> </span>&#123;</span><br><span class="line">                        c.$setValidity(attrs.ensureAction, <span class="literal">false</span>);</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;]);</span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/Ajax/">
+                #Ajax
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/AngularJS/">
+                #AngularJS
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/表单验证/">
+                #表单验证
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+
+          </div>
+
+          
+            <div class="pagination">
+              <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+            </div>
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="http://static.blog.lurrpis.com/logo/500x500.png" alt="LURRPIS" />
+        <p class="site-author-name">LURRPIS<a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></p>
+      </div>
+      <p class="site-description motion-element">快速积累，静待时机</p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">文章</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">102</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      <div class="social-info motion-element">
+            <span class="soclial-item">
+              <a href="https://github.com/lurrpis" target="_blank"><i class="fa fa-github-alt"></i> GitHub</a>
+            </span>
+            <span class="soclial-item">
+              <a href="http://weibo.com/lurrpis" target="_blank"><i class="fa fa-weibo"></i> WeiBo</a>
+            </span>
+            <span class="soclial-item">
+              <a href="javascript:void(0)" target="_blank" id="wechat"><i class="fa fa-weixin"></i> WeChat</a>
+            </span>
+            <div class="div-email">
+              <span class="soclial-item">
+                <a href="mailto:hi@lurrpis.com" target="_blank"><i class="fa fa-paper-plane"></i> Email:hi@lurrpis.com</a>
+              </span>
+            </div>
+            <div class="ercode">
+              <img src="http://static.blog.lurrpis.com/wechat/ercode_fixed.png">
+            </div>
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2012 - 
+  2015
+  <i class="fa fa-cogs fa-spin"></i>  powered by <a href="http://hexo.io" target="_blank" class="theme-link">Hexo</a> at next
+    <div class="footer_icon">
+        <a href="http://www.qiniu.com/" target="_blank"><i class="fa fa-html5"></i></a>
+        <a href="http://cdn.console.aliyun.com/" target="_blank"><i class="fa fa-rocket"></i></a>
+    <a href="http://www.aliyun.com/" target="_blank"><i class="fa fa-skyatlas"></i></a>
+    </div>
+</div>
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200, sequenceQueue: false } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    });
+  </script>
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if(isDesktop()){ 
+        $("#wechat").hover(function(){
+          $(".ercode").filter(':not(:animated)').fadeIn();
+          $(".sidebar-toggle").filter(':not(:animated)').fadeOut();
+          $(".back-to-top").filter(':not(:animated)').fadeOut();
+        },function(){
+          $(".ercode").fadeOut();
+          $(".sidebar-toggle").fadeIn();
+          $(".back-to-top").fadeIn();
+        })
+      }else{
+        $("#wechat").html("<i class='fa fa-qq'></i> Online");
+        $("#wechat").attr('href','http://wpa.qq.com/msgrd?v=3&uin=28568090&site=lurrpis.com&menu=yes');
+      }
+      if(isMobile()){
+        $(".nav-link").click(function(){
+            sidebarHideMotion();
+        });
+      }
+
+      function getParam(pname) { 
+        var params = location.search.substr(1);
+        var ArrParam = params.split('&');  
+        if (ArrParam.length == 1) {  
+          return params.split('=')[1];  
+        } else {  
+        for (var i = 0; i < ArrParam.length; i++) {  
+          if (ArrParam[i].split('=')[0] == pname) {  
+              return ArrParam[i].split('=')[1];  
+            }  
+          }  
+        }
+      } 
+
+      var anchor = $("#" + getParam("to"));
+      if (anchor.length > 0) {
+         var pos = anchor.offset().top;  
+         var poshigh = anchor.height();  
+         $("html,body").animate({ scrollTop: pos-poshigh }, 1000);
+      } 
+
+      var body = $('body');
+      var isSidebarVisible = false;
+      var sidebarToggle = $('.sidebar-toggle');
+      var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+      var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+      var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+      var sidebar = $('.sidebar');
+
+      var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+      var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+      var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+      var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+      var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+      var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+      var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+      sidebatToggleMotion();
+      postsListMotion();
+      backToTopMotion();
+
+      function sidebarContentMotion () {
+        $('.sidebar .motion-element').velocity(
+          'transition.slideRightIn',
+          {stagger: 50, drag: true}
+        );
+      }
+
+      function backToTopMotion () {
+        var b2top = $('.back-to-top');
+        b2top.on('click', function () {
+          body.velocity('scroll');
+        });
+      }
+
+      function sidebarShowMotion () {
+        var sidebarDisplayDuration = 300;
+        if(isMobile())
+          var sidebarWidth = '100%';
+        else
+          var sidebarWidth = '320px';
+
+        sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+        sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+        sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+        sidebar.velocity({width: sidebarWidth}, sidebarDisplayDuration);
+        isDesktop() && body.velocity({paddingRight: sidebarWidth}, sidebarDisplayDuration);
+        sidebarContentMotion();
+      }
+
+      function sidebarHideMotion () {
+        isDesktop() && body.velocity({paddingRight: 0});
+        sidebar.velocity('reverse');
+
+        sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+      };
+
+      function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+      function sidebatToggleMotion () {
+        sidebarToggle.on('click', function () {
+          isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+          isSidebarVisible = !isSidebarVisible;
+        });
+        if(isDesktop()){
+          sidebarToggle.hover(function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+          }, function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+          });
+        }
+      }
+    });
+
+    function isDesktop () {
+      return screen.width > 991;
+    }
+
+    function isTablet () {
+      return screen.width < 992 && screen.width > 767;
+    }
+
+    function isMobile () {
+      return screen.width < 767;
+    }
+  </script>
+
+  
+  
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"lurrpis"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+</body>
+</html>

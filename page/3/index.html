@@ -1,0 +1,828 @@
+<!doctype html>
+<html class="next-plus use-motion">
+<head>
+  
+    
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0rc2"/>
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/awesome/css/font-awesome.min.css?v=4.3.0"/>
+
+
+
+    <meta name="description" content="关注移动互联网、WEB后端开发、服务器运维等，苦逼全栈程序猿的自留地。" />
+
+
+
+
+    <meta name="keywords" content="Laravel,PHP,运维,Hexo,技术博客" />
+
+
+
+    <link rel="alternate" href="/atom.xml" title="lurrpis" type="application/atom+xml" />
+
+
+
+    <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.3.0rc2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <title> lurrpis </title>
+</head>
+
+<body>
+  <div class="container one-column 
+   page-home 
+">
+    <div id="header" class="header">
+      <div class="headband"></div>
+        <div class="wrap">
+    <div class="inner">
+        <span class="head-title">
+            <a class="hvr-underline-from-center" href="/">LURRPIS</a>
+        </span>
+        
+        <ul class="nav-menu">
+        
+         
+            <li>
+                <a href="/" class="hvr-underline-from-center">首页</a>
+            </li>
+            
+         
+            <li>
+                <a href="/archives" class="hvr-underline-from-center">归档</a>
+            </li>
+            
+         
+            <li>
+                <a href="/tags" class="hvr-underline-from-center">标签</a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/31.html">
+                5行代码顶替Smarty，PHP渲染函数
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-04-23
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/31.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="31.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h4 id="前言">前言</h4><p>经常遇到“做些不大不小的项目，懒得用框架，但不用又在某些特殊部位增加很多工作量”的场景，尤其是在没有渲染模板下使用Ajax刷新页面，往往是一大堆JS操作DOM实现页面更新，想做好用户体验却又费时又费力，今天就在爆栈上找到一个自认为很经典又实用的函数(才疏学浅，勿喷)，推荐它主要是因为<code>extract</code>和<code>ob_start</code>配合很少见到(别为自己无知找借口了T^T)，上代码。</p>
+<h4 id="Render函数">Render函数</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">render</span><span class="params">(<span class="variable">$template</span>, <span class="variable">$param</span>=null)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (is_array(<span class="variable">$param</span>) &amp;&amp; !<span class="keyword">empty</span>(<span class="variable">$param</span>))</span><br><span class="line">        extract(<span class="variable">$param</span>);</span><br><span class="line">    ob_start();</span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$template</span>;</span><br><span class="line">    <span class="keyword">return</span> ob_get_clean();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用方法">使用方法</h4><p>使用很简单，大家应该一看就懂，还是啰嗦举个栗子<br>例如一个Ajax返回:<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$result</span> = [</span><br><span class="line">	<span class="string">'success'</span>=&gt;<span class="keyword">true</span>,</span><br><span class="line">	<span class="string">'page'</span>=&gt;Main::render(APP_ROOT.<span class="string">'/views/table.php'</span>,<span class="keyword">array</span>(<span class="string">'data'</span>=&gt;<span class="variable">$data</span>));</span><br><span class="line">];</span><br><span class="line"><span class="keyword">echo</span> json_encode(<span class="variable">$result</span>);</span><br><span class="line"><span class="keyword">exit</span>;</span><br></pre></td></tr></table></figure></p>
+<p><code>table.php</code>中<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">各种html+js+css随便写</span><br><span class="line">&lt;p&gt;</span><br><span class="line">SHIT，直接用原生PHP就可以解析好伐？</span><br><span class="line">DATA:<span class="preprocessor">&lt;?php</span> print_r(<span class="variable">$data</span>); <span class="preprocessor">?&gt;</span></span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="最后">最后</h4><p>这几行代码，就已把数据渲染并且全部转义了有木有，<br>JSON编码简直无压力，传回JS，然后一个<code>$(&quot;#what&quot;).html(data[&#39;page&#39;])</code>，<br>简直完爆几百行JS啊，这么短小精悍，各种视图渲染框架都蹲在墙角不说话。</p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/HTML转为JSON/">
+                #HTML转为JSON
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/PHP-Render/">
+                #PHP Render
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/PHP无框架渲染/">
+                #PHP无框架渲染
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/30.html">
+                ThinkPHP 验证码SESSION不正确，值为空，解决办法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-04-16
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/30.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="30.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h4 id="前言">前言</h4><blockquote>
+<p>其实这个问题的出现和ThinkPHP毫无关系，问题定位错了，自然有很多人苦于找不到解决方法。问题是出现在目前正在着手处理的众筹平台项目<code>美事儿 mser.cn</code>上，在本地开发基础版本后，上传服务器调试发现后台一直无法登陆，DEBUG发现<code>es_session::get(&#39;verify&#39;)</code>为空值，起初以为是ThinkPHP的问题，跟换<code>$_SESSION</code>后，依然为空值，就此确定是系统环境的问题。</p>
+</blockquote>
+<h4 id="确定问题">确定问题</h4><p>首先确定<code>SESSION</code>是否仅跨页无法获取，写俩php。<br><strong>t1.php</strong><br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="variable">$_SESSION</span>[<span class="string">'METEST'</span>]=<span class="string">'我在这里'</span>;</span><br><span class="line"><span class="variable">$url</span>=<span class="string">"&lt;a href='/s2.php'&gt;下一页&lt;/a&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$url</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"本页SESSION:"</span>.<span class="variable">$_SESSION</span>[<span class="string">'METEST'</span>];</span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>t2.php</strong><br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"传递SESSION值为:"</span>.<span class="variable">$_SESSION</span>[<span class="string">'METEST'</span>];</span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>若<code>本页SESSION</code>都为空值，就请百度<code>PHP环境中如何开启SESSION</code>，若本页有值，下一页为空值，请继续往下看。</p>
+<h4 id="解决方法">解决方法</h4><p>还是出于<strong>懒!</strong>，懒得思考，直接去抱度娘古哥大腿，发现大部分答的都是文不对题，习惯性按照各种回答都尝试了一遍，无果。。因此也因为<strong>懒</strong>浪费了很多时间，不费话了。</p>
+<p>打印<code>phpinfo()</code>，认真检查<code>session.save_path</code>是否开启了读写权限，我就是太迷信<code>php.ini</code>中<code>session.save_path</code>设置为了<code>/tmp</code>,而真实环境中加载的却是<code>/var/lib/php/session</code><br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">775</span> -R /var/lib/php/session</span><br></pre></td></tr></table></figure></p>
+<p>就解决了SESSION为空值的问题。</p>
+<h4 id="若依然不行">若依然不行</h4><p>打印<code>phpinfo</code>，检查session.use_trans_sid是否开启，开启办法：<br><strong>php.ini设置</strong><br><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">session<span class="class">.use_trans_sid</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>或<br><strong>代码中申明</strong><br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">ini_set(<span class="string">'session.use_trans_sid'</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="最后">最后</h4><blockquote class="blockquote-center">不想走弯路<br>还是不要<strong>懒</strong><br>搜索之前过下脑</blockquote>
+
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/SESSION无法跨页面/">
+                #SESSION无法跨页面
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/ThinkPHP获取不到SESSION/">
+                #ThinkPHP获取不到SESSION
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/ThinkPHP验证码一直错误/">
+                #ThinkPHP验证码一直错误
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/29.html">
+                随便写写
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-04-16
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/29.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="29.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <p>有几天没有更新博客了，这段时间一直在忙新项目的事情，微思敦的内容管理系统成功上线后，暂时有了点空闲时间，着手开发之前讨论了很久的众筹平台<code>美事儿 mser.cn</code>，虽然不是很看好这个项目，不过也算在茫茫的创业大军中插上一脚，不要掉队把，争取通过这个项目，组建一支小而精的开发团队，互相磨合，在机会真正降临时，能够一把抓住。</p>
+<blockquote class="blockquote-center">毕竟<br>梦想还是要折腾的<br>万一实现了呢</blockquote>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/随笔/">
+                #随笔
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/28.html">
+                黑色产业链:自动批量SHELL一条龙
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-04-07
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/28.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="28.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <p>我偶然接触黑产冰山一角，得知黑产的发展比我们想象还快，已经进化到全自动批量扫描SHELL一条龙，结合前辈揭露的，他们配合，从批量扫描到挂马到挂黑页等，一个傻瓜按钮就完成。我们看看以前，下发命令实现全自动发布广告，再结合现在的批量SHELL，很多中小网站都中标，我揭露的只是他们利用网上已公布的CMS漏洞来写的一些批量工具，这还只是公布的一个漏洞，CMS那么多漏洞，如果都被利用了，想想都可怕。</p>
+<p>URL自动采集、CMS自动识别：<br><img src="http://static.blog.lurrpis.com/shell1.png" alt="shell"><br>DEDE自动扫描上传shell爆密码：<br><img src="http://static.blog.lurrpis.com/shell2.png" alt="shell"><br><img src="http://static.blog.lurrpis.com/shell3.png" alt="shell"><br>原以为这4000多shell可能要自己一个个去试，也想过可能有类似的脚本，但是没想到他们已先一步自动了，</p>
+<p>只需把扫出来的<code>shell</code> <code>CRTL+C</code> <code>CRTL+V</code>就可以自动测试，而且速度还挺快，分类还挺详细：<br><img src="http://static.blog.lurrpis.com/shell4.png" alt="shell"><br><img src="http://static.blog.lurrpis.com/shell5.png" alt="shell"><br><img src="http://static.blog.lurrpis.com/shell6.png" alt="shell"><br>测试了一下就有4000多shell，用一句话测试脚本跑了下，跑了700多条，成功26条，用时半个小时。<br><img src="http://static.blog.lurrpis.com/shell7.png" alt="shell"><br><img src="http://static.blog.lurrpis.com/shell8.png" alt="shell"><br>最新SEO shell工具，用于灰帽SEO<br><img src="http://static.blog.lurrpis.com/shell9.png" alt="shell"><br>最影响深刻一句话是:我前段时间被骗5W多条SHELL，但是没事，有技术，不怕骗。<br>可能说出这句话的人不怎么了解这个数字会对一些做安全的人是怎样一个冲击，但是我深深知道，这影响太大了，5W条SHELL，</p>
+<p>还是能成功连接的，这如果被不法分子掌握，将会是一种什么样的灾难。</p>
+<p>根据前方战地记者了解，这只是他们根据公布的DEDE漏洞写的几个工具而已。他们还有更多我们不知道的自动化，当然碍于各种原因，</p>
+<p>我无从得知。虽然可能现在大型网站都是定制开发，但是普遍的还是中小型，想想我们以后百度一下，都是黑产挂的一些东西，</p>
+<p>那网络环境可得糟糕。希望借此篇让更多人了解安全的重要性，不然前期做的再多，再好都是为了不法之徒养好孩子而已。</p>
+<p><code>v5.0服务器URL采集CMS识别MYSQL版本</code><br>下载地址<br><a href="http://pan.baidu.com/s/1dDF77hB" target="_blank" rel="external">http://pan.baidu.com/s/1dDF77hB</a><br>密码<code>tp3g</code></p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/SHELL批量扫描/">
+                #SHELL批量扫描
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/黑色产业链/">
+                #黑色产业链
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/26.html">
+                OS X Yosemite 10.10.2 WiFi速度慢，断线问题解决办法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+          <span class="post-time">
+            
+              发表于 2015-03-28
+            
+          </span>
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            
+            <a href="/26.html?to=comments" >
+            
+            
+              <span class="post-comments-count ds-thread-count" data-thread-key="26.html"></span>
+            </a>
+          </span>
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <h5 id="前言">前言</h5><blockquote>
+<p>由于目前租房的接入网络是<code>长城宽带</code>，在问题发现根源之前一直以为是长城宽带不给力，最后发现原来是Yosemite系统下蓝牙引发的鸡肋问题。</p>
+</blockquote>
+<h5 id="问题描述">问题描述</h5><p>Pro上网时速度奇慢无比，但同一网络下的平板和手机同时看视频都没有压力，由于问题常在周末发生，一是在抱怨长城宽带，二是怀疑路由器兼容有问题，期间还花费150大洋把Tenda换成TPlink，刚换上神奇的发现网速竟然回归正常，高兴了许久，但没过多少时间，网速又偶尔变成龟速，有时竟然连网关都无法Ping通。</p>
+<h5 id="问题解决">问题解决</h5><p>今天实在忍!不!了!了!这渣网速，去挖掘了下问题的根源，尝试网上提到的几种方法依然无效，最后无奈之下，想起查找问题时有人在其评论中一带而过的<code>蓝牙影响WiFi</code>，因为一直用的蓝牙键鼠，方便携带，最终难以取舍下关闭蓝牙，重新连接Wifi，惊奇的发现，网速竟然恢复正常，又重新打开蓝牙，再次联网，网速又回归龟速，再次尝试先关闭蓝牙，再连接Wifi，再打开蓝牙，这时，网速和蓝牙都回归正常。</p>
+<p>多次测试之后，证实必须先连接Wifi，再连接蓝牙，网速才能回归正常。但在公司没有遇到过类似问题，此问题只在家里重现，不过没有关系，网络龟速问题已经解决(至于是否跟路由相关，我真的懒得折腾，要求不高，让我能安心上个网就谢天谢地了。原来之前老觉着周末网速慢都是自己骗自己，也吐槽了不少遍长宽的种种，因为只在周末用蓝牙，我不会告诉你是因为我平时懒得把鼠标从包里拿出来)</p>
+<h5 id="最后">最后</h5><p>委屈冤枉了<code>长城宽带</code>，其实它有时还蛮快的。</p>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/Wifi掉线/">
+                #Wifi掉线
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/Yosemite/">
+                #Yosemite
+              </a>
+            
+              <a class="hvr-shutter-out-horizontal" href="/tags/网速慢/">
+                #网速慢
+              </a>
+            
+          </div>
+        
+
+        
+
+
+        
+        
+          <div class="post-eof the-shape"></div>
+        
+      </div>
+    
+  </div>
+
+
+  
+
+          </div>
+
+          
+            <div class="pagination">
+              <a class="extend prev" rel="prev" href="/page/2/">&laquo;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">&raquo;</a>
+            </div>
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="http://static.blog.lurrpis.com/logo/500x500.png" alt="LURRPIS" />
+        <p class="site-author-name">LURRPIS<a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></p>
+      </div>
+      <p class="site-description motion-element">快速积累，静待时机</p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">文章</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">102</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      <div class="social-info motion-element">
+            <span class="soclial-item">
+              <a href="https://github.com/lurrpis" target="_blank"><i class="fa fa-github-alt"></i> GitHub</a>
+            </span>
+            <span class="soclial-item">
+              <a href="http://weibo.com/lurrpis" target="_blank"><i class="fa fa-weibo"></i> WeiBo</a>
+            </span>
+            <span class="soclial-item">
+              <a href="javascript:void(0)" target="_blank" id="wechat"><i class="fa fa-weixin"></i> WeChat</a>
+            </span>
+            <div class="div-email">
+              <span class="soclial-item">
+                <a href="mailto:hi@lurrpis.com" target="_blank"><i class="fa fa-paper-plane"></i> Email:hi@lurrpis.com</a>
+              </span>
+            </div>
+            <div class="ercode">
+              <img src="http://static.blog.lurrpis.com/wechat/ercode_fixed.png">
+            </div>
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2012 - 
+  2015
+  <i class="fa fa-cogs fa-spin"></i>  powered by <a href="http://hexo.io" target="_blank" class="theme-link">Hexo</a> at next
+    <div class="footer_icon">
+        <a href="http://www.qiniu.com/" target="_blank"><i class="fa fa-html5"></i></a>
+        <a href="http://cdn.console.aliyun.com/" target="_blank"><i class="fa fa-rocket"></i></a>
+    <a href="http://www.aliyun.com/" target="_blank"><i class="fa fa-skyatlas"></i></a>
+    </div>
+</div>
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200, sequenceQueue: false } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    });
+  </script>
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if(isDesktop()){ 
+        $("#wechat").hover(function(){
+          $(".ercode").filter(':not(:animated)').fadeIn();
+          $(".sidebar-toggle").filter(':not(:animated)').fadeOut();
+          $(".back-to-top").filter(':not(:animated)').fadeOut();
+        },function(){
+          $(".ercode").fadeOut();
+          $(".sidebar-toggle").fadeIn();
+          $(".back-to-top").fadeIn();
+        })
+      }else{
+        $("#wechat").html("<i class='fa fa-qq'></i> Online");
+        $("#wechat").attr('href','http://wpa.qq.com/msgrd?v=3&uin=28568090&site=lurrpis.com&menu=yes');
+      }
+      if(isMobile()){
+        $(".nav-link").click(function(){
+            sidebarHideMotion();
+        });
+      }
+
+      function getParam(pname) { 
+        var params = location.search.substr(1);
+        var ArrParam = params.split('&');  
+        if (ArrParam.length == 1) {  
+          return params.split('=')[1];  
+        } else {  
+        for (var i = 0; i < ArrParam.length; i++) {  
+          if (ArrParam[i].split('=')[0] == pname) {  
+              return ArrParam[i].split('=')[1];  
+            }  
+          }  
+        }
+      } 
+
+      var anchor = $("#" + getParam("to"));
+      if (anchor.length > 0) {
+         var pos = anchor.offset().top;  
+         var poshigh = anchor.height();  
+         $("html,body").animate({ scrollTop: pos-poshigh }, 1000);
+      } 
+
+      var body = $('body');
+      var isSidebarVisible = false;
+      var sidebarToggle = $('.sidebar-toggle');
+      var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+      var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+      var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+      var sidebar = $('.sidebar');
+
+      var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+      var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+      var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+      var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+      var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+      var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+      var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+      var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+      sidebatToggleMotion();
+      postsListMotion();
+      backToTopMotion();
+
+      function sidebarContentMotion () {
+        $('.sidebar .motion-element').velocity(
+          'transition.slideRightIn',
+          {stagger: 50, drag: true}
+        );
+      }
+
+      function backToTopMotion () {
+        var b2top = $('.back-to-top');
+        b2top.on('click', function () {
+          body.velocity('scroll');
+        });
+      }
+
+      function sidebarShowMotion () {
+        var sidebarDisplayDuration = 300;
+        if(isMobile())
+          var sidebarWidth = '100%';
+        else
+          var sidebarWidth = '320px';
+
+        sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+        sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+        sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+        sidebar.velocity({width: sidebarWidth}, sidebarDisplayDuration);
+        isDesktop() && body.velocity({paddingRight: sidebarWidth}, sidebarDisplayDuration);
+        sidebarContentMotion();
+      }
+
+      function sidebarHideMotion () {
+        isDesktop() && body.velocity({paddingRight: 0});
+        sidebar.velocity('reverse');
+
+        sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+      };
+
+      function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+      function sidebatToggleMotion () {
+        sidebarToggle.on('click', function () {
+          isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+          isSidebarVisible = !isSidebarVisible;
+        });
+        if(isDesktop()){
+          sidebarToggle.hover(function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+          }, function () {
+            if (isSidebarVisible) {return}
+            sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+            sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+            sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+          });
+        }
+      }
+    });
+
+    function isDesktop () {
+      return screen.width > 991;
+    }
+
+    function isTablet () {
+      return screen.width < 992 && screen.width > 767;
+    }
+
+    function isMobile () {
+      return screen.width < 767;
+    }
+  </script>
+
+  
+  
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"lurrpis"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc7f220d88f2d472efd2a5d7efdf13e7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+</body>
+</html>
