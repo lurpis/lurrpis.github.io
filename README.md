@@ -1,2 +1,0 @@
-# lurrpis.github.ioasdasd
-asdasdasdasd
